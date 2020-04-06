@@ -1,0 +1,18 @@
+.map {
+  margin-top: 0vh;
+  margin-left: 0vw;
+  height: 100% ;
+  width: 100%;
+}
+
+/* Legend */
+#legend {
+    z-index: 10;
+    position: absolute;
+    width: 180px;
+    height: 230px;
+    bottom: 26px;
+    left: 22px;
+    background-color: aliceblue;
+    box-shadow: 0.5px 0 3px 0px #a49dcf;
+}
