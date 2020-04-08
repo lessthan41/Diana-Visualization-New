@@ -1,23 +1,23 @@
 class Chart {
-    constructor(SOI) {
+    constructor(SOI, id) {
         // console.log(SOI);
         this.SOIDimension = SOI.dimension(function(SOI) {
             return SOI.year;
         });
         // console.log(this.SOIDimension.top(Infinity));
-        this.chartContainer = d3.select('#overviewChart');
+        this.chartContainer = d3.select(id);
         this.chart = null; // This will hold chart SVG Dom element reference
-        this.chartWidth = 720; // Width in pixels
+        this.chartWidth = 710; // Width in pixels
         this.chartHeight = 250; // Height in pixels
         this.margin = 50; // Margin in pixels
         this.chartHeightWithoutMargin = this.chartHeight - this.margin;
         this.chartWidthWithoutMargin = this.chartWidth - this.margin;
-        this.countScale = null;
-        this.yearScale = null;
+        this.xScale = null;
+        this.yScale = null;
         this.tooltipContainer = null;
     }
 
-    render() {
+    rowChart() {
         this.createSvg();
         this.initScales();
         this.drawAxes();
@@ -36,49 +36,49 @@ class Chart {
         let chartWidth = +this.chart.attr('width') - this.margin;
         let chartHeight = +this.chart.attr('height') - this.margin;
 
-        this.countScale = d3.scaleLinear().domain([-5, 5]).range([chartHeight, this.margin]);
-        this.yearScale = d3.scaleLinear().domain([1979, 2020]).range([this.margin, chartWidth]);
+        this.xScale = d3.scaleLinear().domain([-5, 5]).range([this.margin, chartWidth]);
+        this.yScale = d3.scaleLinear().domain([1979, 2020]).range([chartHeight, this.margin]);
     }
 
     drawAxes() {
-        let countAxis = d3.axisLeft(this.countScale);
-        let yearAxis = d3.axisBottom(this.yearScale);
+        let yAxis = d3.axisLeft(this.yScale);
+        let xAxis = d3.axisBottom(this.xScale);
 
         this.chart
             .append('g')
             .attr('class', 'c-axis')
             .attr('transform', 'translate(' + this.margin + ', 0)')
-            .call(countAxis)
+            .call(yAxis)
             .append('g')
             .append('text')
             .attr("fill", "currentColor")
-            .attr('x', '15')
+            .attr('x', '0')
             .attr('dy', '2.5em')
             .attr('font-size', 'larger')
-            .text("SOI Index");
+            .text("Year");
 
         this.chart
             .append('g')
             .attr('class', 'c-axis')
             .attr('transform', 'translate(0, ' + this.chartHeightWithoutMargin + ')')
-            .call(yearAxis)
+            .call(xAxis)
             .append('g')
             .append('text')
             .attr("fill", "currentColor")
-            .attr('x', '500')
+            .attr('x', this.margin + this.chartWidthWithoutMargin / 2)
             .attr('dy', '3.5em')
             .attr('font-size', 'larger')
-            .text("Year");
+            .text("SOI Index");
     }
 
     drawBar() {
 
         let line = d3.line()
             .x((d) => {
-                return this.yearScale(d.year);
+                return this.yScale(d.year);
             })
             .y((d) => {
-                return this.countScale(d.SOI);
+                return this.xScale(d.SOI);
             });
 
         // bar
@@ -87,10 +87,10 @@ class Chart {
             .enter()
             .append('rect')
             .attr('class', 'c-bar')
-            .attr('x', (d) => this.yearScale(d.year))
-            .attr('y', (d) => this.countScale(d.SOI))
-            .attr('height', (d) => this.chartHeightWithoutMargin - this.countScale(d.SOI))
-            .attr('width', () => this.chartWidthWithoutMargin / 45)
+            .attr('y', (d) => this.yScale(d.year))
+            .attr('x', (d) => this.margin)
+            .attr('width', (d) => this.xScale(d.SOI) - this.margin)
+            .attr('height', () => this.chartHeightWithoutMargin / 45)
             .on('mouseover', (d) => {
                 this.showTooltip(
                     parseInt(d.year) + ':  ' + Math.round(d.SOI * 100) / 100,
@@ -141,7 +141,7 @@ class Chart {
         this.tooltipContainer
             .html(content)
             .style('left', left + 10 + 'px')
-            .style('top', top + 20 + 'px');
+            .style('top', top - 50 + 'px');
 
         this.tooltipContainer
             .transition()
@@ -185,8 +185,11 @@ function loadChart() {
             }
         }
 
+        // console.log(afterAdjust);
         afterAdjust = crossfilter(afterAdjust);
-        var chart = new Chart(afterAdjust);
-        chart.render();
+
+        var rowChart = new Chart(afterAdjust, '#overviewChart');
+        rowChart.rowChart();
+
     });
 }

@@ -1,4 +1,4 @@
-function loadEvent() { //load data via ajax
+function loadEvent() {  // load event data via ajax
 
     var url_load = "https://pmdiana.hcilab.katrina.tw/event";
     $.ajax({
@@ -11,19 +11,17 @@ function loadEvent() { //load data via ajax
 }
 
 function event(items) {
-
-    $(".eventSel").val("none");
-
     for (i in items) {
         var tr = $('.eventSel').append($('<option />').attr("value", items[i]["ass_id"]).html(items[i]["event"]));
     }
+    $(".eventSel").val(items[1]["ass_id"]);
 }
 
 var ass_id;
 function poke(county) {
 
-    if ($('#countySel').val()) {
-        ass_id = $('#countySel').val();
+    if ($('#eventSel2').val()) {
+        ass_id = $('#eventSel2').val();
     }
 
     var url_fetch = "https://pmdiana.hcilab.katrina.tw/fetch?county=" + county + "&assessment_id=" + ass_id;

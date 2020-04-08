@@ -26,62 +26,62 @@ var LianJian = ol.proj.fromLonLat([119.953364, 26.180745])
 // 移動到 選擇的縣市
 function doPan(location) {
 
-  view.animate({
-    center: location,
-    duration: 1500
-  });
+    viewForMove.animate({
+        center: location,
+        duration: 1500
+    });
 
 }
 
 // Zoom in 到 選擇的縣市
 function doZoom(location) {
-  var Zoom;
+    var Zoom;
 
-  if (location == Xinchu_city || location == Jiayi_city) {
-    Zoom = 12.4;
-  } else if (location == Taipei || location == Keelung || location == Jingman) {
-    Zoom = 11.5;
-  } else if (location == Zhanghua) {
-    Zoom = 11;
-  } else if (location == Nantou) {
-    Zoom = 9.9;
-  } else if (location == Kaoshong || location == Pingdon || location == Taidong) {
-    Zoom = 9.7;
-  } else if (location == Hualian) {
-    Zoom = 9.3;
-  } else if (location == "point") {
-    Zoom = 16.8
-  } else if (location == "pointToPoint") {
-    Zoom = 13.8
-  } else {
-    Zoom = 10.2;
-  }
-  view.animate({
-    zoom: Zoom,
-    duration: 1500
-  });
+    if (location == Xinchu_city || location == Jiayi_city) {
+        Zoom = 12.4;
+    } else if (location == Taipei || location == Keelung || location == Jingman) {
+        Zoom = 11.5;
+    } else if (location == Zhanghua) {
+        Zoom = 11;
+    } else if (location == Nantou) {
+        Zoom = 9.9;
+    } else if (location == Kaoshong || location == Pingdon || location == Taidong) {
+        Zoom = 9.7;
+    } else if (location == Hualian) {
+        Zoom = 9.3;
+    } else if (location == "point") {
+        Zoom = 16.8
+    } else if (location == "pointToPoint") {
+        Zoom = 13.8
+    } else {
+        Zoom = 10.2;
+    }
+    viewForMove.animate({
+        zoom: Zoom,
+        duration: 1500
+    });
 }
 
 function moveCity(location) {
 
-  doPan(location);
-  setTimeout(function() {
-    doZoom(location);
-  }, 1300);
+    doPan(location);
+    setTimeout(function() {
+        doZoom(location);
+    }, 1300);
 
 }
 
 function movePoint(center, zoom, done) {
-  if (done == "pointToPoint") {
-    doZoom(done);
-  }
+    if (done == "pointToPoint") {
+        doZoom(done);
+    }
 
-  setTimeout(function() {
-    doPan(center);
-  }, 700);
-  setTimeout(function() {
-    doZoom(zoom);
-  }, 1500);
+    setTimeout(function() {
+        doPan(center);
+    }, 700);
+    setTimeout(function() {
+        doZoom(zoom);
+    }, 1500);
 
 }
 
@@ -94,43 +94,43 @@ var feature = new Array(x);
 
 function plot(items) {
 
-  var lat, lng, coordinate;
-  var count = 0;
+    var lat, lng, coordinate;
+    var count = 0;
 
-  if (check == 1) {
-    feature = new Array(count);
-  }
+    if (check == 1) {
+        feature = new Array(count);
+    }
 
-  for (i in items) {
-    lat = parseFloat(items[i]['latitude']);
-    lng = parseFloat(items[i]['longitude']);
-    bridge[count] = [lng, lat];
-    // console.log(bridge[count]);
+    for (i in items) {
+        lat = parseFloat(items[i]['latitude']);
+        lng = parseFloat(items[i]['longitude']);
+        bridge[count] = [lng, lat];
+        // console.log(bridge[count]);
 
-    coordinate = ol.proj.fromLonLat([lng, lat]);
-    feature[i] = new ol.Feature(new ol.geom.Point(coordinate));
-    feature = Object.keys(feature).map(function(key) {
-      return feature[key];
+        coordinate = ol.proj.fromLonLat([lng, lat]);
+        feature[i] = new ol.Feature(new ol.geom.Point(coordinate));
+        feature = Object.keys(feature).map(function(key) {
+            return feature[key];
+        });
+
+        count = count + 1;
+    }
+
+
+
+    var source = new ol.source.Vector({
+        features: feature
     });
+    // l = map.getLayers().getArray()[2];
+    // l.setSource(source);
+    var pointLayer = new ol.layer.Vector({
+        source: source
+    });
+    // console.log(map.getLayers().getArray()[2])
+    map.getLayers().getArray()[2] = pointLayer;
 
-    count = count + 1;
-  }
-
-
-
-  var source = new ol.source.Vector({
-    features: feature
-  });
-  // l = map.getLayers().getArray()[2];
-  // l.setSource(source);
-  var pointLayer = new ol.layer.Vector({
-    source: source
-  });
-  // console.log(map.getLayers().getArray()[2])
-  map.getLayers().getArray()[2] = pointLayer;
-
-  // console.log(map.getLayers());
-  check = 1;
+    // console.log(map.getLayers());
+    check = 1;
 }
 
 //-----------------------------------
@@ -139,49 +139,49 @@ var popup_check = 0;
 
 function popupFunc(geojson, school, coor) {
 
-  popup = new ol.Overlay({
-    element: $("<div />").addClass('info').append( //put a table to element parameter
-      $("<table />").addClass('mdl-data-table mdl-js-data-table mdl-data-table--unselectable mdl-shadow--2dp').append(
-        $("<thead />").append(
-          $("<tr />").append(
-            $("<th />").addClass("mdl-data-table__cell--non-numeric").html("類別")
-          ).append(
-            $("<th />").html("學校資訊")
-          )
-        )
-      ).append(
-        $("<tbody />").append(
-          $("<tr />").append(
-            $("<td />").html("學校")
-          ).append(
-            $("<td />").html(school)
-          )
-        ).append(
-          $("<tr />").append(
-            $("<td />").html("負責人")
-          ).append(
-            $("<td />").html(geojson["name"])
-          )
-        ).append(
-          $("<tr />").append(
-            $("<td />").html("電話")
-          ).append(
-            $("<td />").html(geojson["phone"])
-          )
-        ).append(
-          $("<tr />").append(
-            $("<td />").html("地址")
-          ).append(
-            $("<td />").html(geojson["address"])
-          )
-        )
-      )
-    )[0]
-  });
-  popup.setPosition(ol.proj.fromLonLat(coor));
-  map.addOverlay(popup);
-  // console.log(map.getLayers());
-  popup_check = 1;
+    popup = new ol.Overlay({
+        element: $("<div />").addClass('info').append( //put a table to element parameter
+            $("<table />").addClass('mdl-data-table mdl-js-data-table mdl-data-table--unselectable mdl-shadow--2dp').append(
+                $("<thead />").append(
+                    $("<tr />").append(
+                        $("<th />").addClass("mdl-data-table__cell--non-numeric").html("類別")
+                    ).append(
+                        $("<th />").html("學校資訊")
+                    )
+                )
+            ).append(
+                $("<tbody />").append(
+                    $("<tr />").append(
+                        $("<td />").html("學校")
+                    ).append(
+                        $("<td />").html(school)
+                    )
+                ).append(
+                    $("<tr />").append(
+                        $("<td />").html("負責人")
+                    ).append(
+                        $("<td />").html(geojson["name"])
+                    )
+                ).append(
+                    $("<tr />").append(
+                        $("<td />").html("電話")
+                    ).append(
+                        $("<td />").html(geojson["phone"])
+                    )
+                ).append(
+                    $("<tr />").append(
+                        $("<td />").html("地址")
+                    ).append(
+                        $("<td />").html(geojson["address"])
+                    )
+                )
+            )
+        )[0]
+    });
+    popup.setPosition(ol.proj.fromLonLat(coor));
+    map.addOverlay(popup);
+    // console.log(map.getLayers());
+    popup_check = 1;
 }
 
 
@@ -189,103 +189,105 @@ function popupFunc(geojson, school, coor) {
 var lastSelect = 0;
 
 function selectedrow() {
-  var rowcount = $('#table1 tbody tr').length;
-  var index, view, lat, lng, coor, center, zoom,
-    table = document.getElementById('table1');
+    var rowcount = $('#table1 tbody tr').length;
+    var index, view, lat, lng, coor, center, zoom,
+        table = document.getElementById('table1');
 
-  //setView
+    //setView
 
-  for (var i = 0; i < rowcount; i++) {
+    for (var i = 0; i < rowcount; i++) {
 
-    table.rows[i].onclick = function() {
+        table.rows[i].onclick = function() {
 
-      index = this.rowIndex;
-      // this.classList.toggle('selected');
-      console.log(index);
-      //console.log(feature[index-1]);
+            index = this.rowIndex;
+            // this.classList.toggle('selected');
+            console.log(index);
+            //console.log(feature[index-1]);
 
-      center = feature[index - 1]["N"]["geometry"]["A"];
-      zoom = "point";
-      if (lastSelect != index) {
-        if (map.getView().getZoom() == 16.8) {
-          movePoint(center, zoom, 'pointToPoint');
-        } else {
-          movePoint(center, zoom, 'firstTime');
+            center = feature[index - 1]["N"]["geometry"]["A"];
+            zoom = "point";
+            if (lastSelect != index) {
+                if (map.getView().getZoom() == 16.8) {
+                    movePoint(center, zoom, 'pointToPoint');
+                } else {
+                    movePoint(center, zoom, 'firstTime');
+                }
+            }
+
+            lastSelect = index;
+
+            if (popup_check == 1) {
+                map.removeOverlay(popup);
+            }
+
+            // connect to geojson
+            for (i in geojson) {
+                lat = parseFloat(geojson[i]["latitude"]);
+                lng = parseFloat(geojson[i]["longitude"]);
+                coor = [lng, lat];
+
+                if (coor[0] == bridge[index - 1][0]) {
+                    // console.log(geojson[i]);
+                    // console.log(Object.keys(geojson)[index-1]);
+                    // console.log(coor)
+                    popupFunc(geojson[i], Object.keys(geojson)[index - 1], coor);
+
+                }
+            }
         }
-      }
-
-      lastSelect = index;
-
-      if (popup_check == 1) {
-        map.removeOverlay(popup);
-      }
-
-      // connect to geojson
-      for (i in geojson) {
-        lat = parseFloat(geojson[i]["latitude"]);
-        lng = parseFloat(geojson[i]["longitude"]);
-        coor = [lng, lat];
-
-        if (coor[0] == bridge[index - 1][0]) {
-          // console.log(geojson[i]);
-          // console.log(Object.keys(geojson)[index-1]);
-          // console.log(coor)
-          popupFunc(geojson[i], Object.keys(geojson)[index - 1], coor);
-
-        }
-      }
-    }
-  };
+    };
 };
 
 
 //Choose City change District
-function changeCity(location) {
+function changeCity(location, pan) {
 
-  var City = location;
-  var put = [Taipei, Keelung, Newtaipei, Yeeelan, Taoyuan, Xinchu_city, Xinchu,
-    Miaoli, Taizhong, Zhanghua, Nantou, Jiayi_city, Jiayi, Yunlin,
-    Tainan, Kaoshong, Ponghu, Jingman, Pingdon, Taidong, Hualian, LianJian
-  ];
-  var chinese = ['臺北市', "基隆市", "新北市", "宜蘭縣", "桃園縣", "新竹市", "新竹縣",
-    "苗栗縣", "臺中市", "彰化縣", "南投縣", "嘉義市", "嘉義縣", "雲林縣",
-    "臺南市", "高雄市", "澎湖縣", "金門縣", "屏東縣", "臺東縣", "花蓮縣", "連江縣"
-  ];
+    var City = location;
+    var put = [Taipei, Keelung, Newtaipei, Yeeelan, Taoyuan, Xinchu_city, Xinchu,
+        Miaoli, Taizhong, Zhanghua, Nantou, Jiayi_city, Jiayi, Yunlin,
+        Tainan, Kaoshong, Ponghu, Jingman, Pingdon, Taidong, Hualian, LianJian
+    ];
+    var chinese = ['臺北市', "基隆市", "新北市", "宜蘭縣", "桃園縣", "新竹市", "新竹縣",
+        "苗栗縣", "臺中市", "彰化縣", "南投縣", "嘉義市", "嘉義縣", "雲林縣",
+        "臺南市", "高雄市", "澎湖縣", "金門縣", "屏東縣", "臺東縣", "花蓮縣", "連江縣"
+    ];
 
-  for (i = 0; i < 22; i++) {
-    if (City == chinese[i]) {
-      poke(City);
-      moveCity(put[i]);
+    for (i = 0; i < 22; i++) {
+        if (City == chinese[i] || City == i) {
+            poke(City);
+            if (pan == true) {
+                moveCity(put[i]);
+            }
+        }
     }
-  }
 }
 
 //-----------------------------------------------
 //"pointermove geojson"
 var select = new ol.interaction.Select({
-  condition: ol.events.condition.pointerMove,
-  style: new ol.style.Style({
-    stroke: new ol.style.Stroke({
-      width: 3,
-      color: '#33CCFF'
-    }),
-    fill: new ol.style.Fill({
-      color: [215, 40, 0, 0]
+    condition: ol.events.condition.pointerMove,
+    style: new ol.style.Style({
+        stroke: new ol.style.Stroke({
+            width: 3,
+            color: '#33CCFF'
+        }),
+        fill: new ol.style.Fill({
+            color: [215, 40, 0, 0]
+        })
     })
-  })
 });
 
 if (select !== null) {
-  map.addInteraction(select);
+    map.addInteraction(select);
 }
 
 function add_interaction() {
-  // map.addInteraction(select);
+    map.addInteraction(select);
 }
 
 //del_interaction
 function del_interaction() {
-  // map.removeInteraction(select);
+    map.removeInteraction(select);
 }
 
 
@@ -294,27 +296,26 @@ function del_interaction() {
 var featureName;
 var displayFeatureInfo = function(pixel) {
 
-  var feature = map.forEachFeatureAtPixel(pixel, function(feature) {
-    return feature;
-  });
+    var feature = map.forEachFeatureAtPixel(pixel, function(feature) {
+        return feature;
+    });
 
-  if (feature) {
-    //console.log(feature.get('name'));
-    featureName = feature.get('name');
-    changeCity(featureName);
-  }
+    if (feature) {
+        featureName = feature.get('name');
+        changeCity(featureName, true);
+    }
 };
 
 map.on('singleclick', function(evt) {
-  //change city delete popup
-  if (popup_check == 1) {
-    map.removeOverlay(popup);
-  }
+    //change city delete popup
+    if (popup_check == 1) {
+        map.removeOverlay(popup);
+    }
 
-  if (evt.dragging) {
-    return;
-  }
-  //console.log(evt.originalEvent);
-  var pixel = map.getEventPixel(evt.originalEvent);
-  displayFeatureInfo(pixel);
+    if (evt.dragging) {
+        return;
+    }
+    //console.log(evt.originalEvent);
+    var pixel = map.getEventPixel(evt.originalEvent);
+    displayFeatureInfo(pixel);
 });

@@ -32,9 +32,7 @@ function sort(json) {
             }
         }
     }
-
-
-
+    
     return obj;
 }
 
