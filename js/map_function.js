@@ -240,7 +240,7 @@ function selectedrow() {
 
 
 //Choose City change District
-function changeCity(location, pan) {
+function changeCity(location, pan, cat) {
 
     var City = location;
     var put = [Taipei, Keelung, Newtaipei, Yeeelan, Taoyuan, Xinchu_city, Xinchu,
@@ -254,7 +254,8 @@ function changeCity(location, pan) {
 
     for (i = 0; i < 22; i++) {
         if (City == chinese[i] || City == i) {
-            poke(City);
+            City = chinese[i];
+            poke(City, cat);
             if (pan == true) {
                 moveCity(put[i]);
             }
@@ -281,14 +282,14 @@ if (select !== null) {
     map.addInteraction(select);
 }
 
-function add_interaction() {
-    map.addInteraction(select);
-}
-
-//del_interaction
-function del_interaction() {
-    map.removeInteraction(select);
-}
+// function add_interaction() {
+//     map.addInteraction(select);
+// }
+//
+// //del_interaction
+// function del_interaction() {
+//     map.removeInteraction(select);
+// }
 
 
 //----------------------------------------------------
@@ -302,7 +303,10 @@ var displayFeatureInfo = function(pixel) {
 
     if (feature) {
         featureName = feature.get('name');
-        changeCity(featureName, true);
+        changeCity(featureName, true, 'details');
+
+        let idx = $('#countySel2').find('option:contains('+ featureName +')')[0]['value']; // Change Select Bar Content
+        $('#countySel2').val(idx);
     }
 };
 
@@ -315,7 +319,7 @@ map.on('singleclick', function(evt) {
     if (evt.dragging) {
         return;
     }
-    //console.log(evt.originalEvent);
+    // console.log(evt.originalEvent);
     var pixel = map.getEventPixel(evt.originalEvent);
     displayFeatureInfo(pixel);
 });

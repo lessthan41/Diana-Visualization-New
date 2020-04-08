@@ -37,7 +37,7 @@
 
                             <div class="mdl-cell mdl-cell--6-col" id="section1-1">
                                 <!-- map -->
-                                <div id="map1" onmouseleave="del_interaction()" onmouseover="add_interaction()"></div>
+                                <div id="map1"></div>
                                 <!-- Popup -->
                                 <!-- <div id="popup1"></div> -->
                             </div>
@@ -50,7 +50,7 @@
                                         <div class="subtitle">
                                             <span>請選擇事件</span>
                                         </div>
-                                        <select class="form-control eventSel" id="eventSel1" onchange="changeEvent(1)">
+                                        <select class="form-control eventSel" id="eventSel1" onchange="changeEvent('overview')">
                                             <option value="none">-</option>
                                         </select>
                                     </div>
@@ -58,7 +58,7 @@
                                         <div class="subtitle">
                                             <span>請選擇縣市</span>
                                         </div>
-                                        <select class="form-control countySel" onchange="changeCity(value, false)">
+                                        <select class="form-control countySel" id="countySel1" onchange="changeCity(value, false, 'overview')">
                                             <option value="none" selected>-</option>
                                             <option value="0">臺北市</option>
                                             <option value="1">基隆市</option>
@@ -157,7 +157,8 @@
                     <div class="mdl-grid">
                         <div class="mdl-cell mdl-cell--6-col" id="section2-1">
                             <!-- map -->
-                            <div id="map2" onmouseleave="del_interaction()" onmouseover="add_interaction()"></div>
+                            <div id="map2"></div>
+                            <!-- <div id="map2" onmouseleave="del_interaction()" onmouseover="add_interaction()"></div> -->
                             <!-- Popup -->
                             <div id="popup"></div>
                         </div>
@@ -171,7 +172,7 @@
                                     <div class="subtitle">
                                         <span>請選擇事件</span>
                                     </div>
-                                    <select class="form-control eventSel" id="eventSel2" onchange="changeEvent(2)">
+                                    <select class="form-control eventSel" id="eventSel2" onchange="changeEvent('details')">
                                         <option value="none">-</option>
                                     </select>
                                 </div>
@@ -179,7 +180,7 @@
                                     <div class="subtitle">
                                         <span>請選擇縣市</span>
                                     </div>
-                                    <select class="form-control countySel" onchange="changeCity(value, true)">
+                                    <select class="form-control countySel" id="countySel2" onchange="changeCity(value, true, 'details')">
                                         <option value="none" selected>-</option>
                                         <option value="0">臺北市</option>
                                         <option value="1">基隆市</option>
@@ -222,7 +223,6 @@
                                             <th>電話</th>
                                             <th>填答與否</th>
                                             <th>等級評分</th>
-                                            <th>詳細填答情形</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -289,13 +289,6 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 
     <!--==================================
-                import Semantic
-    ====================================-->
-    <link rel="stylesheet" type="text/css" href="semantic/dist/semantic.min.css">
-    <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
-    <script src="semantic/dist/semantic.min.js"></script>
-
-    <!--==================================
                 import jQuery
     ====================================-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -314,14 +307,13 @@
 
     <!-- My Script -->
     <script type="text/javascript" src='./js/index.js'></script>
+    <script type="text/javascript" src='./js/map.js'></script>
+    <script type="text/javascript" src='./js/chart.js'></script>
     <script type="text/javascript" src='./js/draw.js'></script>
     <script type="text/javascript" src='./js/loadJSON.js'></script>
     <script type="text/javascript" src='./js/map_function.js'></script>
     <script type="text/javascript" src='./js/detail.js'></script>
     <script type="text/javascript" src='./js/request.js'></script>
-
-    <script type="text/javascript" src='./js/map.js'></script>
-    <script type="text/javascript" src='./js/chart.js'></script>
 
 </body>
 

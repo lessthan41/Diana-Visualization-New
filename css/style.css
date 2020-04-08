@@ -4,6 +4,28 @@
     font-size: x-large;
 }
 
+#titleDiv {
+    width: 277px;
+}
+
+/* Nav Bar */
+#navHeader {
+    display: flex;
+    flex-direction: row;
+}
+#navHeader div {
+    height: inherit;
+    margin: auto;
+    margin-left: 0px;
+}
+#navHeader div a:hover {
+    color: white;
+    text-decoration: none;
+}
+#navDiv {
+    text-align: right;
+}
+
 #network {
     font-weight: bold;
     font-family: '微軟正黑體';
@@ -20,6 +42,9 @@
     margin-left: 4px;
     font-weight: 500;
 }
+
+
+
 
 /* Scroll bar */
 ::-webkit-scrollbar {
@@ -39,27 +64,9 @@
     background: rgb(219, 219, 219);
 }
 
-/* Nav Bar */
-#navHeader {
-    display: flex;
-    flex-direction: row;
-}
-#navHeader div {
-    height: inherit;
-    margin: auto;
-    margin-left: 0px;
-}
-#navHeader div a:hover {
-    color: white;
-    text-decoration: none;
-}
-#titleDiv {
-    width: 277px;
-}
-#navDiv {
-    text-align: right;
-}
 
+
+/* Section */
 #section1-1, #section2-1 {
     height: 86vh;
 }
@@ -69,6 +76,19 @@
     overflow-y: scroll;
     overflow-x: hidden;
 }
+
+
+
+/* Section 2-2 */
+#detailTableDiv {
+    overflow-x: scroll;
+}
+#detailTable tr {
+    cursor: pointer;
+}
+
+
+
 
 /* ------------table color-------------- */
 .white {

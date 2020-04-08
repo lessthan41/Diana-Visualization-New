@@ -19,3 +19,12 @@ $(function() {
 function show() {
     $('#dialog1').modal('show');
 }
+
+function changeEvent(cat) {
+    if (cat == 'overview') {
+
+    }
+    else if (cat == 'details') {
+        poke($('#countySel2').val(), 'details');
+    }
+}

@@ -18,23 +18,24 @@ function event(items) {
 }
 
 var ass_id;
-function poke(county) {
+function poke(county, cat) {
 
     if ($('#eventSel2').val()) {
         ass_id = $('#eventSel2').val();
     }
 
     var url_fetch = "https://pmdiana.hcilab.katrina.tw/fetch?county=" + county + "&assessment_id=" + ass_id;
-
+    
     $.ajax({
         url: url_fetch,
         dataType: "json",
         success: function(items) {
-            //console.log(items);
-            // sort(items);
+
             items = sort(items);
             loadJSON(items);
-            plot(items);
+            if (cat == 'details') {
+                plot(items);
+            }
         }
     });
 }
