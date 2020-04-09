@@ -52,7 +52,7 @@
                                             </div>
                                             <div class="legend-right">
                                                 <svg class="color-block">
-                                                  <rect width="100" height="100" fill="rgba(0, 145, 0, 0.5)"></rect>
+                                                    <rect width="100" height="100" fill="rgba(0, 145, 0, 0.5)"></rect>
                                                 </svg>
                                             </div>
                                         </div>
@@ -62,7 +62,7 @@
                                             </div>
                                             <div class="legend-right">
                                                 <svg class="color-block">
-                                                  <rect width="100" height="100" fill="rgba(26, 253, 156, 0.5)"></rect>
+                                                    <rect width="100" height="100" fill="rgba(26, 253, 156, 0.5)"></rect>
                                                 </svg>
                                             </div>
                                         </div>
@@ -72,7 +72,7 @@
                                             </div>
                                             <div class="legend-right">
                                                 <svg class="color-block">
-                                                  <rect width="100" height="100" fill="rgba(255, 255, 55, 0.5)"></rect>
+                                                    <rect width="100" height="100" fill="rgba(255, 255, 55, 0.5)"></rect>
                                                 </svg>
                                             </div>
                                         </div>
@@ -82,7 +82,7 @@
                                             </div>
                                             <div class="legend-right">
                                                 <svg class="color-block">
-                                                  <rect width="100" height="100" fill="rgba(255, 128, 0, 0.5)"></rect>
+                                                    <rect width="100" height="100" fill="rgba(255, 128, 0, 0.5)"></rect>
                                                 </svg>
                                             </div>
                                         </div>
@@ -92,7 +92,7 @@
                                             </div>
                                             <div class="legend-right">
                                                 <svg class="color-block">
-                                                  <rect width="100" height="100" fill="rgba(255, 0, 0, 0.5)"></rect>
+                                                    <rect width="100" height="100" fill="rgba(255, 0, 0, 0.5)"></rect>
                                                 </svg>
                                             </div>
                                         </div>
@@ -264,23 +264,23 @@
                             <!-- Table -->
                             <div class="mdl-grid" id="detailTableDiv">
                                 <div class="mdl-cell mdl-cell--12-col">
-                                <div class="subtitle">
-                                    <span>縣市詳細填答情形</span>
+                                    <div class="subtitle">
+                                        <span>縣市詳細填答情形</span>
+                                    </div>
+                                    <table class="mdl-data-table mdl-js-data-table mdl-data-table--unselectable mdl-shadow--2dp table" id='detailTable'>
+                                        <thead>
+                                            <tr>
+                                                <th class="mdl-data-table__cell--non-numeric">學校</th>
+                                                <th class="thCenter">負責人</th>
+                                                <th class="thCenter">電話</th>
+                                                <th class="thCenter">填答比例</th>
+                                                <th class="thCenter">等級評分</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
                                 </div>
-                                <table class="mdl-data-table mdl-js-data-table mdl-data-table--unselectable mdl-shadow--2dp table" id='detailTable'>
-                                    <thead>
-                                        <tr>
-                                            <th class="mdl-data-table__cell--non-numeric">學校</th>
-                                            <th class="thCenter">負責人</th>
-                                            <th class="thCenter">電話</th>
-                                            <th class="thCenter">填答比例</th>
-                                            <th class="thCenter">等級評分</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                    </tbody>
-                                </table>
-                            </div>
                             </div>
                         </div>
                     </div>
@@ -291,47 +291,57 @@
 
     <!----------------------------------------->
 
-    <!-- 跳出來的Table -->
-    <div class="modal fade bd-example-modal-lg" id='dialog1' tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg modal-dialog-centered">
-            <div class="modal-content">
-                <div class='modal-header'>
-                    <table class="ui celled table" id="table2">
-                        <thead>
-                            <tr>
-                                <th class="center aligned">問卷內容</th>
-                                <th class="center aligned">所屬類別</th>
-                                <th class="center aligned">待改進內容</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td data-label="Name">James</td>
-                                <td data-label="Age">24</td>
-                                <td data-label="Job">Engineer</td>
-                            </tr>
-                            <tr>
-                                <td data-label="Name">Jill</td>
-                                <td data-label="Age">26</td>
-                                <td data-label="Job">Engineer</td>
-                            </tr>
-                            <tr>
-                                <td data-label="Name">Elyse</td>
-                                <td data-label="Age">24</td>
-                                <td data-label="Job">Designer</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+    <dialog class="mdl-dialog" id="building-modal">
+        <button type="button" class="close close1" id="exit-modal1"><i class="fas fa-times"></i></button>
+        <h6 class="mdl-dialog__title" id="buildingTitle"></h6>
+        <div class="mdl-dialog__content">
+            <table class="mdl-data-table mdl-js-data-table mdl-data-table--unselectable mdl-shadow--2dp table" id='buildingTable'>
+                <thead>
+                    <tr>
+                        <th class="mdl-data-table__cell--non-numeric">學校</th>
+                        <th class="thCenter">建築名稱</th>
+                        <th>填答與否</th>
+                        <th class="thCenter">等級評分</th>
+                    </tr>
+                </thead>
+                <tbody id='buildingTbody'>
+                </tbody>
+            </table>
         </div>
-    </div>
+    </dialog>
+
+    <!----------------------------------------->
+
+    <dialog class="mdl-dialog" id="detail-modal">
+        <button type="button" class="close close2" id="exit-modal2"><i class="fas fa-times"></i></button>
+        <h6 class="mdl-dialog__title" id="detail-title"></h6>
+        <div class="mdl-dialog__content">
+            <table class="mdl-data-table mdl-js-data-table mdl-data-table--unselectable mdl-shadow--2dp table" id='modal-detail-table'>
+                <thead>
+                    <tr>
+                        <th class="mdl-data-table__cell--non-numeric">題號</th>
+                        <th class="thCenter">題目內容</th>
+                        <th>敘述</th>
+                        <th class="thCenter">照片連結</th>
+                        <th class="thCenter">位置</th>
+                    </tr>
+                </thead>
+                <tbody id='detail-tbody'>
+                </tbody>
+            </table>
+        </div>
+    </dialog>
 
     <!--==================================
               import D3.js
     ====================================-->
     <script src="https://d3js.org/d3.v5.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crossfilter2/1.4.6/crossfilter.js"></script>
+
+    <!--==================================
+              import fontawesome
+    ====================================-->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
 
     <!--==================================
       Material Design Lite with icon font
@@ -366,6 +376,7 @@
     <script type="text/javascript" src='./js/map_function.js'></script>
     <script type="text/javascript" src='./js/detail.js'></script>
     <script type="text/javascript" src='./js/request.js'></script>
+    <script type="text/javascript" src='./js/modal.js'></script>
 
 </body>
 

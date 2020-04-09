@@ -54,26 +54,29 @@ function loadFetch(county) {
     });
 }
 
-function loadDetail(school) {
 
-    var url_detail = "https://pmdiana.hcilab.katrina.tw/detail?userid=" + userid[school] + "&assessment_id=" + ass_id;
+function loadBuilding(school_id, userid) {
+
+    var url_building = "https://pmdiana.hcilab.katrina.tw/building?school_id=" + school_id + "&assessment_id=" + $('#eventSel2').val();
+
+    $.ajax({
+        url: url_building,
+        dataType: "json",
+        success: function(items) {
+            buildingModal(items, userid);
+        }
+    });
+}
+
+function loadDetail(userid, ass_id, building_id, building_name) {
+
+    var url_detail = "https://pmdiana.hcilab.katrina.tw/detail?userid=" + userid + "&assessment_id=" + ass_id + "&building_id=" + building_id;
 
     $.ajax({
         url: url_detail,
         dataType: "json",
         success: function(items) {
-            detail(items);
+            detailModal(items, building_name);
         }
     });
 }
-
-// function loadJSON() {
-//     var url_json = "https://raw.githubusercontent.com/Bourbon0212/Diana-Visualization/master/assets/twCounty.geojson";
-//     $.ajax({
-//         url: url_json,
-//         dataType: "json",
-//         success: function(items) {
-//             choropleth(items);
-//         }
-//     });
-// }

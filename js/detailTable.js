@@ -43,7 +43,6 @@ function detailTable(items) {
     $("#detailTable tbody tr").remove();
 
     for (i in items) {
-
         var one, two, three;
         one = items[i]['name'];
         two = items[i]['phone'];
@@ -51,7 +50,11 @@ function detailTable(items) {
         userid[i] = items[i]["userid"];
         severity = draw(items[i]["severity"]);
 
-        var tr = $('#detailTable').append($('<tr />').addClass(severity).append($('<td />').addClass('mdl-data-table__cell--non-numeric').html(i))
+        var tr = $('#detailTable').append($('<tr />').addClass(severity)
+            .click(function() {
+                loadBuilding(geojson[$(this).find('td').html()]['school_id'], geojson[$(this).find('td').html()]['userid']);
+            })
+            .append($('<td />').addClass('mdl-data-table__cell--non-numeric').html(i))
             .append($('<td />').html(one).attr('style', 'text-align: center;'))
             .append($('<td />').html(two))
             .append($('<td />').html(three).attr('style', 'text-align: center;'))

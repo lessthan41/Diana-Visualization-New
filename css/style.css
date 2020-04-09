@@ -93,6 +93,33 @@
 
 
 
+/* Building Modal */
+#building-modal {
+    top: 20%;
+    width: 70%;
+    max-height: 70%;
+    overflow-y: scroll;
+}
+
+#detail-modal {
+    top: 25%;
+    width: 90%;
+    max-height: 70%;
+    overflow-y: scroll;
+}
+
+#buildingTable .thCenter {
+    text-align: center;
+}
+#buildingTbody {
+    color: black;
+    cursor: pointer;
+}
+#exit-modal1, #exit-modal2 {
+    width: 30px;
+    height: 30px;
+}
+
 /* ------------table color-------------- */
 .white {
     background-color: rgb(255, 255, 255);
