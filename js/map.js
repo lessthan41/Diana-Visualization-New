@@ -32,7 +32,7 @@ var vector = new ol.layer.Vector({
                 width: 1
             }),
             text: new ol.style.Text({
-                font: '12px Calibri,sans-serif',
+                font: '16px Calibri,sans-serif',
                 stroke: new ol.style.Stroke({
                     color: '#fff',
                     width: 2

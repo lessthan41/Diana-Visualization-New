@@ -190,13 +190,13 @@ function hoverRow() {
     for (var i = 1; i <= rowcount; i++) {
 
         table.rows[i].onmouseover = function() {
+            if (popup_check == 1) {
+                map.removeOverlay(popup);
+            }
 
             index = this.rowIndex;
             lastSelect = index;
 
-            if (popup_check == 1) {
-                map.removeOverlay(popup);
-            }
 
             // connect to geojson
             for (j in geojson) {
@@ -208,7 +208,13 @@ function hoverRow() {
                     popupFunc(geojson[j], Object.keys(geojson)[index - 1], coor);
             }
         }
+
+        table.rows[i].onmouseout = function() {
+            map.removeOverlay(popup);
+        }
     };
+
+
 };
 
 
