@@ -1,30 +1,24 @@
-
 $(function() {
-
-    // Failed to connect
-    if (navigator.onLine) {
-        console.log('online');
-    } else {
-        console.log('offline');
-        $("#network").css('visibility', 'visible');
-    }
-
-
+    var overallData;
     loadEvent(); // request for event
-    loadChart(); // load Crossfilter
 })
 
 // show detail table
-
 function show() {
     $('#dialog1').modal('show');
 }
 
 function changeEvent(cat) {
     if (cat == 'overview') {
-
-    }
-    else if (cat == 'details') {
-        poke($('#countySel2').val(), 'details');
+        loadOverall($('#eventSel1').val());
+    } else if (cat == 'details') {
+        loadFetch($('#countySel2').val());
     }
 }
+
+$('#scroll-tab-1').click(() => {
+    setTimeout( function() { mapDraw.updateSize();}, 100);
+});
+$('#scroll-tab-2').click(() => {
+    setTimeout( function() { map.updateSize();}, 100);
+});

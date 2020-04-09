@@ -92,7 +92,7 @@ var check;
 var bridge = new Array(x);
 var feature = new Array(x);
 
-function plot(items) {
+function plotPoint(items) {
 
     var lat, lng, coordinate;
     var count = 0;
@@ -133,14 +133,11 @@ function plot(items) {
     check = 1;
 }
 
-//-----------------------------------
-
 var popup_check = 0;
-
 function popupFunc(geojson, school, coor) {
 
     popup = new ol.Overlay({
-        element: $("<div />").addClass('info').append( //put a table to element parameter
+        element: $("<div />").addClass('info').attr('width', '80px').append( //put a table to element parameter
             $("<table />").addClass('mdl-data-table mdl-js-data-table mdl-data-table--unselectable mdl-shadow--2dp').append(
                 $("<thead />").append(
                     $("<tr />").append(
@@ -184,36 +181,17 @@ function popupFunc(geojson, school, coor) {
     popup_check = 1;
 }
 
-
-//-----------------------------------
 var lastSelect = 0;
-
-function selectedrow() {
-    var rowcount = $('#table1 tbody tr').length;
+function hoverRow() {
+    var rowcount = $('#detailTable tbody tr').length;
     var index, view, lat, lng, coor, center, zoom,
-        table = document.getElementById('table1');
+        table = document.getElementById('detailTable');
 
-    //setView
+    for (var i = 1; i <= rowcount; i++) {
 
-    for (var i = 0; i < rowcount; i++) {
-
-        table.rows[i].onclick = function() {
+        table.rows[i].onmouseover = function() {
 
             index = this.rowIndex;
-            // this.classList.toggle('selected');
-            console.log(index);
-            //console.log(feature[index-1]);
-
-            center = feature[index - 1]["N"]["geometry"]["A"];
-            zoom = "point";
-            if (lastSelect != index) {
-                if (map.getView().getZoom() == 16.8) {
-                    movePoint(center, zoom, 'pointToPoint');
-                } else {
-                    movePoint(center, zoom, 'firstTime');
-                }
-            }
-
             lastSelect = index;
 
             if (popup_check == 1) {
@@ -221,26 +199,23 @@ function selectedrow() {
             }
 
             // connect to geojson
-            for (i in geojson) {
-                lat = parseFloat(geojson[i]["latitude"]);
-                lng = parseFloat(geojson[i]["longitude"]);
+            for (j in geojson) {
+                lat = parseFloat(geojson[j]["latitude"]);
+                lng = parseFloat(geojson[j]["longitude"]);
                 coor = [lng, lat];
 
-                if (coor[0] == bridge[index - 1][0]) {
-                    // console.log(geojson[i]);
-                    // console.log(Object.keys(geojson)[index-1]);
-                    // console.log(coor)
-                    popupFunc(geojson[i], Object.keys(geojson)[index - 1], coor);
-
-                }
+                if (coor[0] == bridge[index - 1][0])
+                    popupFunc(geojson[j], Object.keys(geojson)[index - 1], coor);
             }
         }
     };
 };
 
 
-//Choose City change District
-function changeCity(location, pan, cat) {
+
+
+
+function changeCity(location) {
 
     var City = location;
     var put = [Taipei, Keelung, Newtaipei, Yeeelan, Taoyuan, Xinchu_city, Xinchu,
@@ -255,16 +230,79 @@ function changeCity(location, pan, cat) {
     for (i = 0; i < 22; i++) {
         if (City == chinese[i] || City == i) {
             City = chinese[i];
-            poke(City, cat);
-            if (pan == true) {
-                moveCity(put[i]);
-            }
+            loadFetch(City);
+            moveCity(put[i]);
         }
     }
 }
 
-//-----------------------------------------------
-//"pointermove geojson"
+
+
+
+
+
+function choropleth(items, drawLayerArray) {
+
+    // var countyJSON = {
+    //     "type": "FeatureCollection",
+    //     "features": []
+    // };
+    // var drawLayerArray = new Array;
+    // var countyName;
+    // var countyRatio;
+    // var feature, vectorSource, style;
+    //
+    // // get every county's fill form ratio
+    // for (i in items["features"]) {
+    //     countyJSON["features"][i] = items["features"][i];
+    //     if (countyJSON["features"][0]["properties"]["COUNTYNAME"] == '桃園縣')
+    //         countyJSON["features"][0]["properties"]["COUNTYNAME"] = '桃園市';
+    //     countyName = countyJSON["features"][0]["properties"]["COUNTYNAME"];
+    //     countyRatio = +overallData[countyName]['check_ratio'];
+    //
+    //     // Draw
+    //     feature = (new ol.format.GeoJSON()).readFeatures(countyJSON);
+    //
+    //     vectorSource = new ol.source.Vector({
+    //         features: feature
+    //     });
+    //
+    //
+    //     style = new ol.style.Style({
+    //         fill: new ol.style.Fill({
+    //             color: [240, 15, 0, 0.5] // semi-transparent red
+    //         })
+    //     });
+    //
+    //     drawLayer = new ol.layer.Vector({
+    //         source: vectorSource,
+    //         style: style
+    //     });
+    //
+    //     // mapDraw.getLayers().getArray().push(drawLayer);
+    //     drawLayerArray.push(drawLayer);
+    // }
+}
+
+
+// function callDraw(vectorSource) {
+//     var my_layer1 = new ol.layer.Vector({
+//         source:vectorSource,
+//         style: function () {
+//             return getStyle();
+//         }
+//     });
+//
+//     mapDraw.getLayers().getArray()[3] = my_layer1;
+// }
+
+
+
+
+
+
+
+// pointermove geojson
 var select = new ol.interaction.Select({
     condition: ol.events.condition.pointerMove,
     style: new ol.style.Style({
@@ -282,18 +320,7 @@ if (select !== null) {
     map.addInteraction(select);
 }
 
-// function add_interaction() {
-//     map.addInteraction(select);
-// }
-//
-// //del_interaction
-// function del_interaction() {
-//     map.removeInteraction(select);
-// }
-
-
-//----------------------------------------------------
-// "click"
+// click
 var featureName;
 var displayFeatureInfo = function(pixel) {
 

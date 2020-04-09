@@ -2,19 +2,20 @@ class Chart {
     constructor(SOI, id) {
         // console.log(SOI);
         this.SOIDimension = SOI.dimension(function(SOI) {
-            return SOI.year;
+            return SOI.category;
         });
         // console.log(this.SOIDimension.top(Infinity));
         this.chartContainer = d3.select(id);
         this.chart = null; // This will hold chart SVG Dom element reference
-        this.chartWidth = 710; // Width in pixels
+        this.chartWidth = 650; // Width in pixels
         this.chartHeight = 250; // Height in pixels
-        this.margin = 50; // Margin in pixels
+        this.margin = 60; // Margin in pixels
         this.chartHeightWithoutMargin = this.chartHeight - this.margin;
         this.chartWidthWithoutMargin = this.chartWidth - this.margin;
         this.xScale = null;
         this.yScale = null;
         this.tooltipContainer = null;
+        this.xMax = 5;
     }
 
     rowChart() {
@@ -36,13 +37,35 @@ class Chart {
         let chartWidth = +this.chart.attr('width') - this.margin;
         let chartHeight = +this.chart.attr('height') - this.margin;
 
-        this.xScale = d3.scaleLinear().domain([-5, 5]).range([this.margin, chartWidth]);
-        this.yScale = d3.scaleLinear().domain([1979, 2020]).range([chartHeight, this.margin]);
+        // Adjust Scale Appearance
+        let yDomain = this.SOIDimension.top(Infinity).map((d) => {return d.category});
+        yDomain.unshift("");
+        yDomain.push("");
+
+        // generate ordinal yRange
+        let interval = (chartHeight - this.margin) / (this.SOIDimension.top(Infinity).length + 1);
+        let yRange = [];
+        for (let pos = chartHeight; pos >= this.margin; pos -= interval) {
+            yRange.push(pos);
+        }
+
+        // Adding xMax if out of range
+        function findMax (data) {
+            let max = 0;
+            for (i in data) max = data[i]['count'] > max ? data[i]['count'] : max;
+            return max;
+        }
+        while (findMax(this.SOIDimension.top(Infinity)) > this.xMax)
+            this.xMax += 5;
+
+        this.xScale = d3.scaleLinear().domain([0, this.xMax]).range([this.margin, chartWidth]);
+        this.yScale = d3.scaleOrdinal().domain(yDomain).range(yRange);
     }
 
     drawAxes() {
+        let format = d3.format('.0f');
+        let xAxis = d3.axisBottom(this.xScale).tickFormat(format).ticks(this.xMax);
         let yAxis = d3.axisLeft(this.yScale);
-        let xAxis = d3.axisBottom(this.xScale);
 
         this.chart
             .append('g')
@@ -52,10 +75,10 @@ class Chart {
             .append('g')
             .append('text')
             .attr("fill", "currentColor")
-            .attr('x', '0')
-            .attr('dy', '2.5em')
+            .attr('x', '10')
+            .attr('dy', '4em')
             .attr('font-size', 'larger')
-            .text("Year");
+            .text("類別");
 
         this.chart
             .append('g')
@@ -65,20 +88,20 @@ class Chart {
             .append('g')
             .append('text')
             .attr("fill", "currentColor")
-            .attr('x', this.margin + this.chartWidthWithoutMargin / 2)
-            .attr('dy', '3.5em')
+            .attr('x', (this.margin + this.chartWidthWithoutMargin) / 2)
+            .attr('dy', '3em')
             .attr('font-size', 'larger')
-            .text("SOI Index");
+            .text("待改進數量");
     }
 
     drawBar() {
 
         let line = d3.line()
             .x((d) => {
-                return this.yScale(d.year);
+                return this.yScale(d.category);
             })
             .y((d) => {
-                return this.xScale(d.SOI);
+                return this.xScale(d.count);
             });
 
         // bar
@@ -87,13 +110,13 @@ class Chart {
             .enter()
             .append('rect')
             .attr('class', 'c-bar')
-            .attr('y', (d) => this.yScale(d.year))
-            .attr('x', (d) => this.margin)
-            .attr('width', (d) => this.xScale(d.SOI) - this.margin)
-            .attr('height', () => this.chartHeightWithoutMargin / 45)
+            .attr('y', (d) => { return this.yScale(d.category) - this.chartHeightWithoutMargin / 24; })
+            .attr('x', (d) => this.margin + 1)
+            .attr('width', (d) => this.xScale(d.count) - this.margin)
+            .attr('height', () => this.chartHeightWithoutMargin / 12)
             .on('mouseover', (d) => {
                 this.showTooltip(
-                    parseInt(d.year) + ':  ' + Math.round(d.SOI * 100) / 100,
+                    d.category + ':  ' + d.count,
                     d3.event.pageX,
                     d3.event.pageY
                 );
@@ -104,24 +127,11 @@ class Chart {
             .on('mousemove', (d) => {
                 this.hideTooltip();
                 this.showTooltip(
-                    parseInt(d.year) + ':  ' + Math.round(d.SOI * 100) / 100,
+                    d.category + ':  ' + Math.round(d.count * 100) / 100,
                     d3.event.pageX,
                     d3.event.pageY
                 );
             });
-
-        // Absline
-        this.chart
-            .append('g')
-            .attr('class', 'abs-line')
-            .append('path')
-            .attr('d', line([{
-                year: 1979,
-                SOI: 0
-            }, {
-                year: 2020,
-                SOI: 0
-            }]))
 
     }
 
@@ -160,36 +170,18 @@ class Chart {
 }
 
 function loadChart() {
-    d3.dsv(',', 'https://raw.githubusercontent.com/lessthan41/D3_Practice/master/Climate_HW6/SOI.csv', function(row) {
-        return {
-            year: +row['Year'],
-            month: row['Month'],
-            SOI: +row['SOI']
-        };
-    }).then(function(SOI) {
+    var dataToDraw = new Array;
+    var county = $('#countySel1 option:selected').text()
+    for (i in overallData[county]["TBD"]) {
+        var temp = new Object;
+        temp["category"] = i;
+        temp["count"] = overallData[county]["TBD"][i];
+        dataToDraw.push(temp);
+    }
 
+    dataToDraw = crossfilter(dataToDraw);
 
-        let i, j;
-        let afterAdjust = new Array;
-        for (i = 1980; i < 2019; i++) {
-            for (j = 0; j < 12; j++) {
-                let sum = 0;
-                if (SOI[12 * (i - 1980) + j].year == i) {
-                    // console.log(SOI[j + k*(i-1980)]);
-                    sum += SOI[12 * (i - 1980) + j].SOI;
-                }
-                afterAdjust[i - 1980] = {
-                    'year': i,
-                    SOI: sum / 12
-                }
-            }
-        }
-
-        // console.log(afterAdjust);
-        afterAdjust = crossfilter(afterAdjust);
-
-        var rowChart = new Chart(afterAdjust, '#overviewChart');
-        rowChart.rowChart();
-
-    });
+    d3.selectAll(".c-chart > *").remove(); // Clear chart
+    var rowChart = new Chart(dataToDraw, '#overviewChart');
+    rowChart.rowChart();
 }

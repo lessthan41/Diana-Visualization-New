@@ -83,7 +83,10 @@
 #detailTableDiv {
     overflow-x: scroll;
 }
-#detailTable tr {
+#detailTable .thCenter {
+    text-align: center;
+}
+#detailTable > tbody > tr {
     cursor: pointer;
 }
 

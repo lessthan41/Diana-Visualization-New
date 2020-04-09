@@ -18,8 +18,6 @@
         <header class="mdl-layout__header" id='navHeader'>
             <div class="mdl-layout__header-row" id='titleDiv'>
                 <span class="mdl-layout-title" id='title'>校舍安全檢核系統</span>
-                <!-- <div class="mdl-layout-spacer"></div>
-              <span class="mdl-layout-title" id='network'>未連接至網路</span> -->
             </div>
             <!-- Tabs -->
             <div class="mdl-layout__tab-bar mdl-js-ripple-effect" id='navDiv'>
@@ -38,11 +36,69 @@
                             <div class="mdl-cell mdl-cell--6-col" id="section1-1">
                                 <!-- map -->
                                 <div id="map1"></div>
-                                <!-- Popup -->
-                                <!-- <div id="popup1"></div> -->
                             </div>
                             <!-- Legend -->
-                            <div id="legend"></div>
+                            <div id="legend">
+                                <div class="mdl-grid">
+                                    <div class="mdl-cell mdl-cell--12-col" id="legendHead">
+                                        <span>填答情形</span>
+                                    </div>
+                                </div>
+                                <div class="mdl-grid" id="legendBody">
+                                    <div class="mdl-cell mdl-cell--12-col" id="legendBodyContainer">
+                                        <div class="legend-content">
+                                            <div class="legend-left">
+                                                <span>90% up</span>
+                                            </div>
+                                            <div class="legend-right">
+                                                <svg class="color-block">
+                                                  <rect width="100" height="100" fill="rgba(0, 145, 0, 0.5)"></rect>
+                                                </svg>
+                                            </div>
+                                        </div>
+                                        <div class="legend-content">
+                                            <div class="legend-left">
+                                                <span>80% ~ 90%</span>
+                                            </div>
+                                            <div class="legend-right">
+                                                <svg class="color-block">
+                                                  <rect width="100" height="100" fill="rgba(26, 253, 156, 0.5)"></rect>
+                                                </svg>
+                                            </div>
+                                        </div>
+                                        <div class="legend-content">
+                                            <div class="legend-left">
+                                                <span>60% ~ 80%</span>
+                                            </div>
+                                            <div class="legend-right">
+                                                <svg class="color-block">
+                                                  <rect width="100" height="100" fill="rgba(255, 255, 55, 0.5)"></rect>
+                                                </svg>
+                                            </div>
+                                        </div>
+                                        <div class="legend-content">
+                                            <div class="legend-left">
+                                                <span>40% ~ 60%</span>
+                                            </div>
+                                            <div class="legend-right">
+                                                <svg class="color-block">
+                                                  <rect width="100" height="100" fill="rgba(255, 128, 0, 0.5)"></rect>
+                                                </svg>
+                                            </div>
+                                        </div>
+                                        <div class="legend-content">
+                                            <div class="legend-left">
+                                                <span>40% below</span>
+                                            </div>
+                                            <div class="legend-right">
+                                                <svg class="color-block">
+                                                  <rect width="100" height="100" fill="rgba(255, 0, 0, 0.5)"></rect>
+                                                </svg>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
                             <div class="mdl-cell mdl-cell--6-col" id="section1-2">
                                 <div class="mdl-grid selectDiv">
@@ -51,16 +107,14 @@
                                             <span>請選擇事件</span>
                                         </div>
                                         <select class="form-control eventSel" id="eventSel1" onchange="changeEvent('overview')">
-                                            <option value="none">-</option>
                                         </select>
                                     </div>
                                     <div class="mdl-cell mdl-cell--6-col countySelDiv">
                                         <div class="subtitle">
                                             <span>請選擇縣市</span>
                                         </div>
-                                        <select class="form-control countySel" id="countySel1" onchange="changeCity(value, false, 'overview')">
-                                            <option value="none" selected>-</option>
-                                            <option value="0">臺北市</option>
+                                        <select class="form-control countySel" id="countySel1" onchange="loadChart(value)">
+                                            <option value="0" selected>臺北市</option>
                                             <option value="1">基隆市</option>
                                             <option value="2">新北市</option>
                                             <option value="3">宜蘭縣</option>
@@ -173,16 +227,14 @@
                                         <span>請選擇事件</span>
                                     </div>
                                     <select class="form-control eventSel" id="eventSel2" onchange="changeEvent('details')">
-                                        <option value="none">-</option>
                                     </select>
                                 </div>
                                 <div class="mdl-cell mdl-cell--6-col countySelDiv">
                                     <div class="subtitle">
                                         <span>請選擇縣市</span>
                                     </div>
-                                    <select class="form-control countySel" id="countySel2" onchange="changeCity(value, true, 'details')">
-                                        <option value="none" selected>-</option>
-                                        <option value="0">臺北市</option>
+                                    <select class="form-control countySel" id="countySel2" onchange="changeCity(value)">
+                                        <option value="0" selected>臺北市</option>
                                         <option value="1">基隆市</option>
                                         <option value="2">新北市</option>
                                         <option value="3">宜蘭縣</option>
@@ -219,10 +271,10 @@
                                     <thead>
                                         <tr>
                                             <th class="mdl-data-table__cell--non-numeric">學校</th>
-                                            <th>負責人</th>
-                                            <th>電話</th>
-                                            <th>填答與否</th>
-                                            <th>等級評分</th>
+                                            <th class="thCenter">負責人</th>
+                                            <th class="thCenter">電話</th>
+                                            <th class="thCenter">填答比例</th>
+                                            <th class="thCenter">等級評分</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -310,7 +362,7 @@
     <script type="text/javascript" src='./js/map.js'></script>
     <script type="text/javascript" src='./js/chart.js'></script>
     <script type="text/javascript" src='./js/draw.js'></script>
-    <script type="text/javascript" src='./js/loadJSON.js'></script>
+    <script type="text/javascript" src='./js/detailTable.js'></script>
     <script type="text/javascript" src='./js/map_function.js'></script>
     <script type="text/javascript" src='./js/detail.js'></script>
     <script type="text/javascript" src='./js/request.js'></script>
