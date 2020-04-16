@@ -1,5 +1,5 @@
 class Chart {
-    constructor(SOI, id) {
+    constructor(SOI, id, width, height, margin) {
         // console.log(SOI);
         this.SOIDimension = SOI.dimension(function(SOI) {
             return SOI.category;
@@ -7,9 +7,9 @@ class Chart {
         // console.log(this.SOIDimension.top(Infinity));
         this.chartContainer = d3.select(id);
         this.chart = null; // This will hold chart SVG Dom element reference
-        this.chartWidth = 650; // Width in pixels
-        this.chartHeight = 250; // Height in pixels
-        this.margin = 60; // Margin in pixels
+        this.chartWidth = width; // Width in pixels
+        this.chartHeight = height; // Height in pixels
+        this.margin = margin; // Margin in pixels
         this.chartHeightWithoutMargin = this.chartHeight - this.margin;
         this.chartWidthWithoutMargin = this.chartWidth - this.margin;
         this.xScale = null;
@@ -23,6 +23,11 @@ class Chart {
         this.initScales();
         this.drawAxes();
         this.drawBar();
+    }
+
+    ratioChart() {
+        this.createSvg();
+        this.drawRatio();
     }
 
     createSvg() {
@@ -135,6 +140,46 @@ class Chart {
 
     }
 
+    drawRatio() {
+        let line = d3.line()
+            .x((d) => {
+                return this.yScale(d.cat);
+            })
+            .y((d) => {
+                return this.xScale(d.number);
+            });
+
+
+        // bar
+        this.chart.selectAll()
+            .data(this.SOIDimension.top(Infinity))
+            .enter()
+            .append('rect')
+            .attr('class', (d) => (d.cat == 'uncheck' ? 'c-bar uncheck' : 'c-bar'))
+            .attr('y', 0)
+            .attr('x', (d) => this.margin + 1 + (d.cat == 'checked' ? 0 : 1) * this.chartWidthWithoutMargin * (1 - d.perc))
+            .attr('width', (d) => this.chartWidthWithoutMargin * d.perc)
+            .attr('height', () => this.chartHeightWithoutMargin)
+            .on('mouseover', (d) => {
+                this.showTooltip(
+                    d.cat + ':  ' + d.number,
+                    d3.event.pageX,
+                    d3.event.pageY
+                );
+            })
+            .on('mouseout', (d) => {
+                this.hideTooltip();
+            })
+            .on('mousemove', (d) => {
+                this.hideTooltip();
+                this.showTooltip(
+                    d.cat + ':  ' + Math.round(d.number * 100) / 100,
+                    d3.event.pageX,
+                    d3.event.pageY
+                );
+            });
+    }
+
     createTooltipIfDoesntExist() {
         if (this.tooltipContainer !== null) {
             return;
@@ -151,7 +196,9 @@ class Chart {
         this.tooltipContainer
             .html(content)
             .style('left', left + 10 + 'px')
-            .style('top', top - 50 + 'px');
+            .style('top', top - 50 + 'px')
+            .style('background', (content.includes("uncheck") ? 'AntiqueWhite' : 'aliceblue'))
+            .style('border-color', (content.includes("uncheck") ? '#dc3545' : '#2055b6'));
 
         this.tooltipContainer
             .transition()
@@ -170,18 +217,23 @@ class Chart {
 }
 
 function loadChart() {
-    var dataToDraw = new Array;
+    var dataToRowChart = new Array;
+    var chartWidth = $('#ratioChart').width();
     var county = $('#countySel1 option:selected').text()
     for (i in overallData[county]["TBD"]) {
         var temp = new Object;
         temp["category"] = i;
         temp["count"] = overallData[county]["TBD"][i];
-        dataToDraw.push(temp);
+        dataToRowChart.push(temp);
     }
-
-    dataToDraw = crossfilter(dataToDraw);
-
+    dataToRowChart = crossfilter(dataToRowChart);
     d3.selectAll(".c-chart > *").remove(); // Clear chart
-    var rowChart = new Chart(dataToDraw, '#overviewChart');
+    var rowChart = new Chart(dataToRowChart, '#overviewChart', width = chartWidth, height = 250, margin = 60);
     rowChart.rowChart();
+
+    dataToRatio = crossfilter([{"cat": "checked", "number": +overallData[county]['checked_num'], 'perc': +overallData[county]['check_ratio']},
+                               {"cat": "uncheck", "number": +overallData[county]['uncheck_num'], 'perc': 1 - +overallData[county]['check_ratio']}]);
+
+    var ratioChart = new Chart(dataToRatio, '#ratioChart', width = chartWidth, height = 30, margin = 0);
+    ratioChart.ratioChart();
 }

@@ -1,3 +1,11 @@
+#ratioChart {
+    width: 95%;
+    height: 30px;
+    margin: auto;
+    overflow-x: scroll;
+    overflow-y: hidden;
+}
+
 #overviewChart {
     overflow-x: scroll;
 }
@@ -28,13 +36,22 @@
   fill: #2f6bda;
   opacity: 0.6;
 }
-  .c-chart .c-bar:hover{
+    .c-chart .c-bar:hover{
     fill: #285dbf;
     transition: .1s;
-  }
+    }
 .c-chart--half {
   flex-basis: 50%;
 }
+
+.c-chart .uncheck {
+    stroke: #dc3545;
+    fill: #dc3545;
+}
+    .c-chart .uncheck:hover{
+      fill: #ea1024;
+      transition: .1s;
+    }
 
 .c-axis {
   width: 100%;
@@ -53,5 +70,4 @@
   padding: 10px;
   border: 1px solid #2055b6;
   position: absolute;
-  background: aliceblue;
 }
