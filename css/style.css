@@ -91,8 +91,6 @@
 }
 
 
-
-
 /* Building Modal */
 #building-modal {
     top: 20%;
@@ -118,6 +116,14 @@
 #exit-modal1, #exit-modal2 {
     width: 30px;
     height: 30px;
+}
+
+/* Detail Modal */
+#modal-detail-table .thCenter {
+    text-align: center;
+}
+#detail-tbody {
+    color: black;
 }
 
 /* ------------table color-------------- */
