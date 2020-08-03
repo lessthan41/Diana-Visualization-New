@@ -6,7 +6,7 @@ function loadEvent() { // load event data via ajax
         dataType: "json",
         success: function(items) {
             event(items);
-            loadOverall($('#eventSel1').val()); // load Overall
+            loadOverall($('#eventSel1').val(), $('#countySel1').val()); // load Overall
             loadFetch($('#countySel2 option:selected').text());
         }
     });
@@ -20,15 +20,17 @@ function event(items) {
     $(".eventSel").val(items[1]["assessment_id"]);
 }
 
-function loadOverall(ass_id) { // load event data via ajax
+function loadOverall(ass_id, county) { // load event data via ajax
 
-    var url_load = "https://pmdiana.hcilab.katrina.tw/overall?assessment_id=" + ass_id;
+    var url_load = "https://pmdiana.hcilab.katrina.tw/overall?assessment_id=" + ass_id + "&county=" + county;
+
     $.ajax({
         url: url_load,
         dataType: "json",
         success: function(items) {
             overallData = items;
             loadChart(); // load Crossfilter
+            loadNER();
             mapInit();
         }
     });
@@ -79,4 +81,8 @@ function loadDetail(userid, ass_id, building_id, building_name) {
             detailModal(items, building_name);
         }
     });
+}
+
+function loadNER(ass_id, county) {
+
 }

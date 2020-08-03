@@ -1,7 +1,7 @@
 
 
 function buildingModal(data, userid) {
-    console.log(data);
+    // console.log(data);
     var assessment_id = data["assessment_id"];
     var dialog = document.querySelector('#building-modal');
     dialog.showModal();

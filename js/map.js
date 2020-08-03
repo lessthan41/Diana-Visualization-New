@@ -56,19 +56,19 @@ function getStyle (countyName) {
     percentage = +overallData[countyName]["check_ratio"];
     switch (true) {
         case (percentage < 0.4):
-            color = [255, 0, 0, 0.5]; // semi-transparent red
+            color = [23, 156, 3, 0.1]; // semi-transparent red
             break;
         case (percentage < 0.6):
-            color = [255, 128, 0, 0.5]; // semi-transparent orange
+            color = [23, 156, 3, 0.2]; // semi-transparent orange
             break;
         case (percentage < 0.8):
-            color = [255, 255, 55, 0.5]; // semi-transparent yellow
+            color = [23, 156, 3, 0.4]; // semi-transparent yellow
             break;
         case (percentage < 0.9):
-            color = [26, 253, 156, 0.5]; // semi-transparent green
+            color = [23, 156, 3, 0.55]; // semi-transparent green
             break;
         default:
-            color = [0, 145, 0, 0.5]; // semi-transparent green
+            color = [23, 156, 3, 0.75]; // semi-transparent green
             break;
     }
 
@@ -100,7 +100,10 @@ function mapInit() {
         }),
         style: function(feature) {
             let style = getStyle(feature.get('COUNTYNAME'));
-            style.getText().setText(feature.get('COUNTYNAME'))
+            // if (feature.get('COUNTYNAME') == "桃園縣")
+            //     style.getText().setText("桃園市");
+            // else
+            //     style.getText().setText(feature.get('COUNTYNAME'));
             return style;
         }
     });
@@ -120,8 +123,6 @@ var pointLayer = new ol.layer.Vector({});
 var popup = new ol.Overlay({
     element: document.getElementById('popup')
 });
-
-
 
 
 //map init
