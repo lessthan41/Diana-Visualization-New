@@ -16,8 +16,7 @@ function event(items) {
     for (i in items) {
         var tr = $('.eventSel').append($('<option />').attr("value", items[i]["assessment_id"]).html(items[i]["event"]));
     }
-
-    $(".eventSel").val(items[1]["assessment_id"]);
+    $(".eventSel").val(items[0]["assessment_id"]);
 }
 
 function loadOverall(ass_id, county) { // load event data via ajax

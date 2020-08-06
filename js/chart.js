@@ -68,9 +68,9 @@ class Chart {
     }
 
     drawAxes() {
-        let denominator = 5;
-        while(this.xMax / denominator > 10) {
-            denominator += 5;
+        let denominator = 10;
+        while(this.xMax < denominator) {
+            denominator = this.xMax;
         }
         let format = d3.format('.0f');
         let xAxis = d3.axisBottom(this.xScale).tickFormat(format).ticks(denominator);
